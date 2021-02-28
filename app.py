@@ -24,6 +24,7 @@ Base.prepare(engine, reflect=True)
 measurement = Base.classes.measurement
 station  = Base.classes.station
 
+session = Session(engine)
 
 #Flask setup
 
@@ -58,7 +59,7 @@ def welcome():
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
-    session = Session(engine)
+    
     #return the precipitation data from last year
     #py = dt.date(2017,8,23) - dt.timedelta(days=365)
     latest1 = session.query(func.max(measurement.date)).scalar()  #latest date from database
@@ -78,7 +79,7 @@ def precipitation():
 
 @app.route("/api/v1.0/stations")
 def stations():
-    session = Session(engine)
+# session = Session(engine)
     results = session.query(station.station,station.name).all()
     
     #stations = list(np.ravel(results))
@@ -91,7 +92,7 @@ def stations():
 
 @app.route("/api/v1.0/tobs")
 def temp_monthly():
-    session = Session(engine)
+    #session = Session(engine)
     #py = dt.date(2017,8,23) - dt.timedelta(days=365)
     #getting latest date from database
     latest1 = session.query(func.max(measurement.date)).scalar()  #latest date from database
@@ -117,7 +118,7 @@ def temp_monthly():
 @app.route("/api/v1.0/temp/<start>")
 @app.route("/api/v1.0/temp/<start>/<end>")
 def stats(start = None, end = None):
-    session = Session(engine)
+    #session = Session(engine)
     sel = [func.min(measurement.tobs), func.avg(measurement.tobs), func.max(measurement.tobs)]
     
     if not end:
